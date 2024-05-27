@@ -1,0 +1,75 @@
+_grade: 1.72
+_score: 100
+date: '2019-12-03 07:34:39.935086'
+tree:
+  00-hola_mundo-10/:
+    _grade: 5.0
+    _score: 10
+    tree:
+      q01-10/: {_grade: 5.0, _score: 10, tree: 5.0}
+  01-hadoop-50/:
+    _grade: 4.5
+    _score: 50
+    tree:
+      q01-10/: {_grade: 5.0, _score: 10, tree: 5.0}
+      q02-10/: {_grade: 5.0, _score: 10, tree: 5.0}
+      q03-10/: {_grade: 5.0, _score: 10, tree: 5.0}
+      q04-10/: {_grade: 5.0, _score: 10, tree: 5.0}
+      q05-10/: {_grade: 5.0, _score: 10, tree: 5.0}
+      q06-10/: {_grade: 5.0, _score: 10, tree: 5.0}
+      q07-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q08-10/: {_grade: 5.0, _score: 10, tree: 5.0}
+      q09-10/: {_grade: 5.0, _score: 10, tree: 5.0}
+      q10-10/: {_grade: 5.0, _score: 10, tree: 5.0}
+  02-linux/:
+    _grade: 0.0
+    _score: 50
+    tree:
+      q01-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q02-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q03-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q04-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q05-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q06-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q07-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q08-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q09-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q10-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q11-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q12-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q13-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q14-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q15-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q16-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q17-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q18-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q19-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q20-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q21-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q22-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q23-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q24-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q25-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q26-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q27-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q28-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q29-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q30-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q31-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+  03-hive-50/:
+    _grade: 0.0
+    _score: 50
+    tree:
+      q01-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q02-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q03-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q04-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q05-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q06-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q07-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q08-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q09-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q10-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q11-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+      q12-10/: {_grade: 0.0, _score: 10, tree: 0.0}
+

@@ -1,0 +1,13 @@
+-- 
+-- Pregunta
+-- ===========================================================================
+--
+-- Realice una consulta que compute la cantidad de veces que aparece cada valor 
+-- de la columna `t0.c5`  por año.
+--
+-- Escriba el resultado a la carpeta `output` de directorio de trabajo.
+--
+--
+-- >>> Escriba su respuesta a partir de este punto <<<
+--
+

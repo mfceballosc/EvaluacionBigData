@@ -1,0 +1,66 @@
+#! /usr/local/bin/python3
+r"""Test cases
+>>> run_answer()
+data1.csv,1,E,jjj:3
+data1.csv,1,E,bbb:0
+data1.csv,1,E,ddd:9
+data1.csv,1,E,ggg:8
+data1.csv,1,E,hhh:2
+data1.csv,2,A,ccc:2
+data1.csv,2,A,ddd:0
+data1.csv,2,A,aaa:3
+data1.csv,2,A,hhh:9
+data1.csv,3,B,ddd:2
+data1.csv,3,B,ggg:5
+data1.csv,3,B,ccc:6
+data1.csv,3,B,jjj:1
+data2.csv,1,A,hhh:9
+data2.csv,1,A,iii:5
+data2.csv,1,A,eee:7
+data2.csv,1,A,bbb:1
+data2.csv,2,C,iii:6
+data2.csv,2,C,ddd:5
+data2.csv,2,C,eee:4
+data2.csv,2,C,jjj:3
+data3.csv,1,A,bbb:2
+data3.csv,1,A,hhh:0
+data3.csv,1,A,ccc:4
+data3.csv,1,A,fff:1
+data3.csv,1,A,aaa:7
+data3.csv,2,A,aaa:5
+data3.csv,2,A,fff:8
+data3.csv,2,A,ddd:2
+data3.csv,2,A,iii:0
+data3.csv,2,A,jjj:7
+data3.csv,2,A,ccc:1
+data3.csv,3,B,fff:3
+data3.csv,3,B,hhh:1
+data3.csv,3,B,ddd:2
+<BLANKLINE>
+
+"""
+import doctest
+import subprocess
+
+def run_answer():
+    '''Codigo especifico para ejecutar la respuesta'''
+    #----------------------------------------------------------------------------------------------
+    # Ejecuta el código del estudiante
+    #----------------------------------------------------------------------------------------------
+    import os
+    _ = os.system('bash question.sh > out')
+    answer = open('out', 'rt').read()
+    os.remove('out')
+    print(answer)
+
+#--------------------------------------------------------------------------------------------------
+# Grader (generic)
+#--------------------------------------------------------------------------------------------------
+subprocess.run(['rm', '-f', '_SUCCESS']) # borra el flag de exito de la corrida
+RESULT = doctest.testmod()               # ejecuta el doctest
+FAIL, _ = RESULT                         # fail, total
+if FAIL == 0:                            # grading
+    open('_SUCCESS', 'a').close()        #
+else:
+    print('\n')
+#--------------------------------------------------------------------------------------------------
