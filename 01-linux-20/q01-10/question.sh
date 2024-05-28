@@ -1,7 +1,7 @@
 ##
 ##  LAB: Transformación de archivos con `sed`
 ##  ================================================
-##
+## docker run --rm -it --name ubuntu -v "%cd%":/workspace jdvelasq/ubuntu:20.04
 ##  Una tarea común en Analytics es el procesamiento de archivos en bruto para que puedan 
 ##  ser usados en otros procesos, donde gran parte de dicho procesamiento corresponde a la 
 ##  transforamción del formato. Estos archivos suelen tener millones de registros por lo que 
@@ -35,3 +35,18 @@
 ##
 ##  >>> Escriba su codigo a partir de este punto <<<
 ##
+#!/bin/bash
+
+# sed -E 's;([0-9]{1,2})/([0-9]{1,2})/([0-9]{4});\3-\2-\1;g' data.csv > output.csv
+
+# sed -E 's;([0-9]{1,2})/([0-9]{1,2})/([0-9]{4});\3-\2-\1;g' data.csv > output.csv
+
+
+# sed -E 's;([0-9]{1,2})/([0-9]{1,2})/([0-9]{4});\3-\2-\1;g' data.csv > output.csv
+# sed -E 's;([0-9]{1,2})/([0-9]{1,2})/([0-9]{2});20\3-\2-\1;g'  output.csv
+
+sed -i -E 's;([0-9]{1,2})/([0-9]{1,2})/([0-9]{4});\3-0\2-0\1;g
+s;([0-9]{1,2})/([0-9]{1,2})/([0-9]{2});20\3-\2-\1;g
+s?,?.?g
+s?;?,?g
+' data.csv
