@@ -1,7 +1,10 @@
 ##
 ##  LAB: Transformación de archivos con `sed`
 ##  ================================================
+## descargar imagen ubuntu
 ## docker run --rm -it --name ubuntu -v "%cd%":/workspace jdvelasq/ubuntu:20.04
+## ejecutar una imagen ya descargada
+## docker exec -it ubuntu bash
 ##  Una tarea común en Analytics es el procesamiento de archivos en bruto para que puedan 
 ##  ser usados en otros procesos, donde gran parte de dicho procesamiento corresponde a la 
 ##  transforamción del formato. Estos archivos suelen tener millones de registros por lo que 
@@ -37,26 +40,18 @@
 ##
 #!/bin/bash
 
-
-# sed -E 's;([0-9]{1,2})/([0-9]{1,2})/([0-9]{4});\3-0\2-0\1;g
-# s;([0-9]{1,2})/([0-9]{1,2})/([0-9]{2});20\3-\2-\1;g
-# s;\\;;g
-# s;n;N;g
-# s?;;?;N;?g
-# s;N;\\N;g
-# s?,?.?g
-# s?;?,?g
-# ' data.csv > output.csv
-
-#:a;N;$!ba;s/\n/ /g
-#s?;$!ba;\\N?g
-
-sed -E 's;([0-9]{1,2})/([0-9]{1,2})/([0-9]{4});\3-0\2-0\1;g
+sed -i -E '
+s/[a-z]/\U&/g
+s/;$/;\N/
+s;([0-9]{1,2})/([0-9]{1,2})/([0-9]{4});\3-0\2-0\1;g
 s;([0-9]{1,2})/([0-9]{1,2})/([0-9]{2});20\3-\2-\1;g
 s;\\;;g
-s/[a-z]/\U&/g
 s?;;?;N;?g
 s;N;\\N;g
 s?,?.?g
 s?;?,?g
-' data.csv > output.csv
+' data.csv
+
+
+# sed 's/;$/;-N/' data.csv > output.csv 
+

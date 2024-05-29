@@ -23,3 +23,27 @@
 ##
 ##  >>> Escriba su codigo a partir de este punto <<<
 ##
+##  ===========================================================================
+#!/bin/bash
+for file in data*.csv; do
+    i=1
+    while read -r line; do
+   # Dividir la línea en campos utilizando la coma como delimitador
+        IFS='	' read -ra fields <<< "$line"
+        col1="${fields[0]}"
+        rest = "${fields[1]}"
+        echo $rest
+        IFS=',' read -ra restos <<< "$rest"
+        # Iterar sobre los elementos restantes en la línea
+        for ((j = 0; j < ${#restos[@]}; j++)); do
+            letter="${restos[j]}"
+            # Aquí puedes imprimir los campos según sea necesario
+            # echo "$file,$i,$col1,$letter"
+            echo "$file,$i,$col1,$letter"
+        done
+        ((i++))
+    done < "$file"
+done
+##  >>> Fin del código <<<
+##  ===========================================================================
+
