@@ -2,6 +2,10 @@
 ##  Programación en Bash
 ##  ===========================================================================
 ##
+## descargar imagen ubuntu
+## docker run --rm -it --name ubuntu -v "%cd%":/workspace jdvelasq/ubuntu:20.04
+## ejecutar una imagen ya descargada
+## docker exec -it ubuntu bash
 ##  Usando los archivos `data1.csv`, `data2.csv`, `data3.csv`, escriba en el
 ##  archivo `script.sh`  un programa en Bash que imprima en pantalla
 ##  la siguiente salida por linea:
@@ -25,23 +29,24 @@
 ##
 ##  ===========================================================================
 #!/bin/bash
+# echo "***************************************************************"
+# echo "***************************************************************"
 for file in data*.csv; do
     i=1
-    while read -r line; do
+    n_fila=1
+    while read -r line || [[ -n $line ]]; do
    # Dividir la línea en campos utilizando la coma como delimitador
-        IFS='	' read -ra fields <<< "$line"
-        col1="${fields[0]}"
-        rest = "${fields[1]}"
-        echo $rest
-        IFS=',' read -ra restos <<< "$rest"
-        # Iterar sobre los elementos restantes en la línea
-        for ((j = 0; j < ${#restos[@]}; j++)); do
-            letter="${restos[j]}"
-            # Aquí puedes imprimir los campos según sea necesario
-            # echo "$file,$i,$col1,$letter"
-            echo "$file,$i,$col1,$letter"
+   if [[ -n "$line" ]]; then
+        if [[ "$line" =~ ^([^[:space:]]+)[[:space:]]+(.+)$ ]]; then
+            col1="${BASH_REMATCH[1]}"
+            rest="${BASH_REMATCH[2]}"
+        fi
+        IFS=',' read -ra arreglo <<< "$rest"
+        for field in "${arreglo[@]}"; do
+            echo "$file,$n_fila,$col1,$field"
         done
-        ((i++))
+        n_fila=$((n_fila + 1))
+    fi
     done < "$file"
 done
 ##  >>> Fin del código <<<
