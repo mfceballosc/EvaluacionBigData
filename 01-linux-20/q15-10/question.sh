@@ -7,3 +7,6 @@
 ## 
 ##  >>> Escriba su codigo a partir de este punto <<<
 ##
+#!/bin/bash
+city=$(sort -t',' -k1,1 person | awk -F',' 'NR==3 {print $3}')
+echo "$city"

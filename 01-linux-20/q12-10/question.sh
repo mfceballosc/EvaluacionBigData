@@ -6,3 +6,7 @@
 ## 
 ##  >>> Escriba su codigo a partir de este punto <<<
 ##
+#!/bin/bash
+
+contador=$(grep -c 'New York (New York)' person)
+echo "$contador"
