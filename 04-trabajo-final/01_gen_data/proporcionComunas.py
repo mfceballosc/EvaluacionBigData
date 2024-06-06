@@ -57,6 +57,7 @@ def generar_coordenadas(df):
         msk = df.NOMBRE==comuna
         d_comuna = df.loc[msk]
         df_comuna = gen_data(d_comuna)
+        # if df_res.shape[0] > 0:
         df_res = pd.concat([df_res, df_comuna], ignore_index=True)
     
     cols = ['OBJECTID', 'CODIGO', 'NOMBRE', 'IDENTIFICACION', 'LIMITEMUNICIPIOID',

@@ -23,6 +23,8 @@ def leer_archivo_comuna(path, anno = 2024):
 def calcular_data(df, size=1000):
     pesos = df.Proporcion.tolist()
     df['Ponderados'] = [int(np.random.uniform(prop*3/4, prop+prop/2)*size) for prop in pesos]
+    # df['Ponderados'] = [int(np.random.uniform(prop*3/4, prop+prop/2) * size) if prop == 0 else 1 for prop in pesos]
+
     return df
 
 
