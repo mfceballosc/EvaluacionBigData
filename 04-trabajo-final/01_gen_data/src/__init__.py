@@ -1,1 +1,0 @@
-from .common import leer_archivo_comuna, calcular_data, gen_datetime, asociar_comunas, gen_data, generar_coordenadas
