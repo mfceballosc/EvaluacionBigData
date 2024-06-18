@@ -13,7 +13,6 @@ import numpy as np
 
 import shapely.wkb
 import geopandas as gpd
-import matplotlib.pyplot as plt
 from shapely import wkb
 from shapely.geometry import Point
 

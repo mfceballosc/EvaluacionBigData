@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-
+import math
 
 from shapely.geometry import Point
 import shapely.wkb
@@ -18,7 +18,6 @@ from shapely import wkb
 
 
 
-# from src import leer_archivo_comuna, calcular_data, gen_datetime, asociar_comunas, gen_data, generar_coordenadas
 
 file_path = r"data\1. Proyecciones Medellín por Comunas y Corregimientos 2018 - 2030.xlsx"
 
@@ -59,6 +58,8 @@ def leer_archivo_comuna(path, anno = 2024):
     df = df[cols]
     total = df[anno][21]
     df['Proporcion'] = df[[anno]]/total
+    df['Porcentaje'] = df[[anno]]/total*100
+    df['Porcentaje'] = df['Porcentaje'].apply(math.ceil)
     df['Comuna'] = df['Comuna'].str.upper()
     df['Comuna'] = df['Comuna'].apply(lambda x: x.replace(' - ', ' ') if pd.notna(x) else x)
     mask = df.Comuna == 'BELEN'
@@ -82,15 +83,17 @@ def asociar_comunas(df1, df2):
                 val = list(df2[df2.Comuna==c2].Ponderados)[0]
                 id_com = list(df2[df2.Comuna==c2].id_comuna)[0]
                 msk = df1.NOMBRE==c1                
-                df1.loc[msk, 'Ponerado'] = val
+                df1.loc[msk, 'Ponderado'] = val
                 df1.loc[msk, 'id_comuna'] = id_com
+                df1.loc[msk, 'comuna2'] = c2
+    df1.reset_index(inplace=True, drop=True)
     return df1
 
 
 def gen_data(data):
     geometry = shapely.wkb.loads(data['geometry'])[0]
     x0, y0, x1, y1 = geometry.bounds
-    n_data = list(data.Ponerado)[0]
+    n_data = list(data.Ponderado)[0]
     points = []
     while len(points) < n_data:
         point = Point(np.random.uniform(x0, x1), np.random.uniform(y0, y1))
@@ -124,38 +127,137 @@ def generar_coordenadas(df):
     df_res = df_res[cols]
     return df_res
 
-
-def gen_id_user_comuna(df, n_data):
-    # df['id_user']  = np.random.uniform(1, n_data, df.shape[0])
-    df['id_user']  = np.random.randint(1, n_data, size=df.shape[0])
-    return df
     
+def gen_id_user_comuna(df, df_com):
+    # df = df.sort_values(by='comuna')
+    # df.reset_index(drop=True, inplace=True)
+    n_por_comuna = df['comuna'].value_counts().sort_index().to_dict()
+    df_com['id_user'] = 0
+    df_arrays = df_com[['comuna2', 'Ponderado']]
+    df_tmp = pd.DataFrame()
+    for k, rng in n_por_comuna.items():
+        msk = df_arrays.comuna2==k
+        n = int(list(df_arrays[df_arrays.comuna2==k]['Ponderado'])[0])
+        array = [int(np.random.uniform(0, rng)) for i in range(n)]
+        tmp = df_com[msk]
+        coord = gen_data(tmp)
+        tmp = pd.concat([tmp] * n, ignore_index=True)
+        tmp['geometry'] = coord['geometry']    
+        tmp['points'] = coord['points']    
+        tmp['array'] = array      
+        df_tmp = pd.concat([df_tmp, tmp], ignore_index=True)
+    return df_tmp
+
+
+def distribuir_personas_comunas(df_p, df_c):
+    n_p = df_p.shape[0]
+    n_c = df_c.shape[0]
+    if n_p >= n_c:
+        df_c['Proporcion'] = df_c['Proporcion'].astype(float)
+        comunas = np.random.choice(df_c['Comuna'], size=n_p, p=df_c['Proporcion'])    
+        df_p['comuna'] = comunas
+        df_p = df_p.sort_values(by='comuna')
+        df_p.reset_index(drop=True, inplace=True)
+        n_por_comuna = df_p['comuna'].value_counts().sort_index()
+        df_p['id_count_comuna']  = [j for i in n_por_comuna for j in range(i)]
+        df_p = df_p.sort_values(by=['comuna', 'id_count_comuna'])
+        df_p.reset_index(drop=True, inplace=True)
+        return df_p
+    else:
+        df = pd.DataFrame()
+        personas_por_comuna = np.ceil(df_c['Proporcion'] * n_p).astype(int)
+        personas_rep = np.tile(df_p['name'], personas_por_comuna.sum())[:n_c]
+        np.random.shuffle(personas_rep)
+        for p in personas_rep:
+            df2 = df_p[df_p.name==p]
+            df = pd.concat([df, df2], ignore_index=True)
+        df_p = df
+        df_p['comuna'] = df_c['Comuna']
+        return df_p
+
+def conv_seg(segundos):
+    horas = segundos // 3600
+    minutos = (segundos % 3600) // 60
+    seconds = segundos % 60
+    return timedelta(hours=horas, minutes=minutos, seconds=int(seconds))
+
+
+def set_fecha(fech):
+    fech = fech
+    def sumaFecha(i):
+        return fech + i
+    return sumaFecha
+
+
+def gen_datetime(fecha, cantidad):
+    n = 86400
+    l_seg = np.random.normal(loc=n/2, scale=n/6, size=cantidad)
+    l_seg = np.clip(l_seg, 0, n)
+    res = map(conv_seg, l_seg)    
+    f = set_fecha(fecha)
+    res = map(f, res)    
+    return list(res)
+
+def obtener_coordenadas(punto):
+    geo = wkb.loads(punto)
+    return geo.x, geo.y
+
+
+def asociar_com_empl(df_com, df_empl, tipo):
+    cols = {col:f"{tipo}_{col}" for col in df_empl.columns}
+    df_empl.rename(columns=cols, inplace=True)
+    df_empl = df_empl.rename(columns={'empl_comuna': 'comuna2'})
+    # df_com = df_com.rename(columns={'comuna2': 'comuna'})
+    df_res = pd.merge(df_com, df_empl, on='comuna2', how='left')
+    
+    
+    return df_res
 
 
 if __name__ == "__main__":
     fecha = "03/04/2024"
     n_dias = 2    
     fecha = datetime.strptime(fecha, "%d/%m/%Y")
+    # datetime.strptime(f.strftime("%Y/%m/%d"), "%Y/%m/%d") 
     f_temp = [fecha + timedelta(days=d) for d in range(n_dias)]    
     fechas = [datetime.strptime(f.strftime("%Y/%m/%d"), "%Y/%m/%d") for f in f_temp]   
     df_parquet = pd.DataFrame()
     
-    n_datos = 10000
+    n_datos = 1000
     
-    df_i = leer_archivo_comuna(file_path)
+    df_com = leer_archivo_comuna(file_path)
     df_cust = pd.read_parquet(file_customers)
     df_empl = pd.read_parquet(file_employees)
-    df_comunas = pd.read_parquet(file_comunas_path)  
-    df_comunas = df_comunas.dropna(subset=['NOMBRE'])
-    df_com_base = calcular_data(df_i, n_datos)    
-    df = asociar_comunas(df_comunas, df_com_base)
     
-    # df_cust = gen_id_user_comuna(df=df_cust, n_data=df.shape[0])
+    df_cust = distribuir_personas_comunas(df_cust, df_com)    
+    df_empl = distribuir_personas_comunas(df_empl, df_com)    
+    df_comunas = pd.read_parquet(file_comunas_path) 
+    df_comunas = df_comunas.dropna(subset=['NOMBRE']) 
     
+    df_com = calcular_data(df_com, n_datos)
+    df_com = asociar_comunas(df_comunas, df_com)
+    
+    df_com = asociar_com_empl(df_com, df_empl, 'empl')
+    
+    
+    
+    df_cust = gen_id_user_comuna(df=df_cust, df_com=df_com)    
+    l_fecha = gen_datetime(fecha, df_cust.shape[0])    
+    df_cust['fecha'] = l_fecha    
+    df_cust[['latitud', 'longitud']] = df_cust['points'].apply(lambda geom: pd.Series(obtener_coordenadas(geom)))
+    
+    df_cust['event_date'] = df_cust['fecha'].astype(str)
+    df_cust[['event_date', 'event_hour']] = df_cust['event_date'].str.split(' ', expand=True)
+    df_cust[['event_year', 'event_month', 'event_day']] = df_cust['event_date'].str.split('-', expand=True)
+    df_cust[['event_hour', 'event_minute', 'event_second']] = df_cust['event_hour'].str.split(':', expand=True)
+    
+    df_cust['partition_date'] = df_cust['event_day'] +  df_cust['event_month'] + df_cust['event_year']
     
     
     # df = generar_coordenadas(df)
     
+    
+    # df_2 = asociar_id_elm1_elm2(df, df_cust, 'customer')
     
     
     
