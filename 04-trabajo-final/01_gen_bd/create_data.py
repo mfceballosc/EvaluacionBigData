@@ -264,16 +264,15 @@ if __name__ == "__main__":
     
     df_cust = df_cust.rename(columns={'NOMBRE': 'neighborhood'})
     df_cust = df_cust.rename(columns={'IDENTIFICACION': 'commune'})
-    # df_cust = df_cust.rename(columns={'': 'customer_id'})
+    df_cust = df_cust.rename(columns={'empl_employee_id': 'employee_id'})
+    df_cust['quantity_products'] = 1
     
-    # df = generar_coordenadas(df)
-    
-    
-    # df_2 = asociar_id_elm1_elm2(df, df_cust, 'customer')
-    
-    
-    
-    
+    cols =['partition_date', 'commune', 'customer_id', 'employee_id', 
+            'event_date', 'event_day', 'event_hour', 'event_minute', 
+            'event_month', 'event_second', 'event_year', 'latitude', 'longitude',
+            'neighborhood', 'quantity_products']
+
+    df = df_cust[cols]
     
     
     
