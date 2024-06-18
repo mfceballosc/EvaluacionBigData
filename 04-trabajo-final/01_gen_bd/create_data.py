@@ -142,10 +142,20 @@ def gen_id_user_comuna(df, df_com):
         tmp = df_com[msk]
         coord = gen_data(tmp)
         tmp = pd.concat([tmp] * n, ignore_index=True)
+        
         tmp['geometry'] = coord['geometry']    
         tmp['points'] = coord['points']    
-        tmp['array'] = array      
+        tmp['id_count_comuna'] = array
+        
+        tmp2 = df[df.comuna==k]
+        #hacer el join de tmp y tmp2
+        tmp = pd.merge(tmp, tmp2, on='id_count_comuna', how='left')   
+        
         df_tmp = pd.concat([df_tmp, tmp], ignore_index=True)
+        
+        
+        
+        
     return df_tmp
 
 
@@ -206,11 +216,9 @@ def obtener_coordenadas(punto):
 def asociar_com_empl(df_com, df_empl, tipo):
     cols = {col:f"{tipo}_{col}" for col in df_empl.columns}
     df_empl.rename(columns=cols, inplace=True)
-    df_empl = df_empl.rename(columns={'empl_comuna': 'comuna2'})
+    df_empl = df_empl.rename(columns={f'{tipo}_comuna': 'comuna2'})
     # df_com = df_com.rename(columns={'comuna2': 'comuna'})
-    df_res = pd.merge(df_com, df_empl, on='comuna2', how='left')
-    
-    
+    df_res = pd.merge(df_com, df_empl, on='comuna2', how='left')   
     return df_res
 
 
@@ -244,7 +252,7 @@ if __name__ == "__main__":
     df_cust = gen_id_user_comuna(df=df_cust, df_com=df_com)    
     l_fecha = gen_datetime(fecha, df_cust.shape[0])    
     df_cust['fecha'] = l_fecha    
-    df_cust[['latitud', 'longitud']] = df_cust['points'].apply(lambda geom: pd.Series(obtener_coordenadas(geom)))
+    df_cust[['latitude', 'longitude']] = df_cust['points'].apply(lambda geom: pd.Series(obtener_coordenadas(geom)))
     
     df_cust['event_date'] = df_cust['fecha'].astype(str)
     df_cust[['event_date', 'event_hour']] = df_cust['event_date'].str.split(' ', expand=True)
@@ -253,6 +261,10 @@ if __name__ == "__main__":
     
     df_cust['partition_date'] = df_cust['event_day'] +  df_cust['event_month'] + df_cust['event_year']
     
+    
+    df_cust = df_cust.rename(columns={'NOMBRE': 'neighborhood'})
+    df_cust = df_cust.rename(columns={'IDENTIFICACION': 'commune'})
+    # df_cust = df_cust.rename(columns={'': 'customer_id'})
     
     # df = generar_coordenadas(df)
     
