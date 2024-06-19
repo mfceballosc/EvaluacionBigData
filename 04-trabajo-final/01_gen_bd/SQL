@@ -10,14 +10,22 @@ spark.sql("SELECT * FROM file_parquet")
 #cargamos la tabla 
 df = spark.table("file_parquet")
 
+###Formas
 
 #SELECT
-df.select("partition_date", "order_id", "commune", 'customer_id', 'employee_id', 'event_date', 'event_day', 'event_hour', 'event_minute', 'event_month', 'event_second', 'event_year', 'latitude', 'longitude', 'neighborhood', 'quantity_products').show()
+df.select("partition_date", "order_id", "commune", "customer_id", "employee_id", "event_date", "event_day", "event_hour", "event_minute", "event_month", "event_second", "event_year", "latitude", "longitude", "neighborhood", "quantity_products").show()
+
+#Tipo pandas
+
+df[["partition_date", "order_id", "commune", "customer_id", "employee_id", "event_date", "event_day", "event_hour", "event_minute", "event_month", "event_second", "event_year", "latitude", "longitude", "neighborhood", "quantity_products"]].show()
+
+#Tipo atributo
+df.select(df.partition_date, df.order_id, df.commune, df.customer_id, df.employee_id, ).show()
+
+
+##COL
+from pyspark.sql.functions import col
 
 
 
-
-  cols =['partition_date', 'order_id', 'commune', 'customer_id', 'employee_id', 
-            'event_date', 'event_day', 'event_hour', 'event_minute', 
-            'event_month', 'event_second', 'event_year', 'latitude', 'longitude',
-            'neighborhood', 'quantity_products']
+ 
