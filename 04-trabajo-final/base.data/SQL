@@ -1,7 +1,1 @@
-# selecciona la tabla
-spark.table("XXXXX")
 
-#Read
-spark.read.table("XXXX")
-
-spark.sql("SELECT * FROM unal.users")
