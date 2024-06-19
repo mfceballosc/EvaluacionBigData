@@ -267,7 +267,8 @@ if __name__ == "__main__":
     
     df_cust = gen_id_user_comuna(df=df_cust, df_com=df_com)    
     l_fecha = gen_datetime(fecha, df_cust.shape[0])    
-    df_cust['fecha'] = l_fecha    
+    df_cust['fecha'] = l_fecha
+    df_cust = df_cust.sort_values(by='fecha', ascending=False)
     df_cust[['latitude', 'longitude']] = df_cust['points'].apply(lambda geom: pd.Series(obtener_coordenadas(geom)))
     
     df_cust['event_date'] = df_cust['fecha'].astype(str)
