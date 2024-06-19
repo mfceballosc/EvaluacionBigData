@@ -26,6 +26,24 @@ df.select(df.partition_date, df.order_id, df.commune, df.customer_id, df.employe
 ##COL
 from pyspark.sql.functions import col
 
+df.select(col("first_name"), col("age")).show()
+
+#ALIAS
+
+
+
+#CAST
+
+df.select(
+    col("first_name").alias("user_full_name"),
+    col("age").cast("float").alias("older")
+).printSchema()
+
+
+#FILTRANDO DATOS
+#WHERE
+df.where(col("quantity_products") > 50).show()
+
 
 
  
