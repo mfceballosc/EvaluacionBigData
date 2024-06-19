@@ -11,7 +11,10 @@ create database trabajo;
 #estamos trabjando con hive pero fisicamente quedaría en una locación de hdfs
 #interno queda todo sobre el nivel de la carpeta de hive y externo utilizamos locaciones externas  
 
-create database trabajo_externo LOCATION '/unal/demo.db':
+create database trabajo_externo LOCATION '/unal/demo.db';
+
+#para ver información respecto a la tabla creada
+describe database trabajo;
 
 
 
