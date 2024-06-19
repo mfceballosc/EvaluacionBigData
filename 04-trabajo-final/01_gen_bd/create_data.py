@@ -27,7 +27,8 @@ file_employees = r'../base.data/employees.parquet'
 
 if __name__ == "__main__":
     fecha = "03/04/2024"
-    name_file = f"{fecha.replace('/','')}.parquet"
+    time = datetime.now().strftime('%S:%M:%H').replace(':','')
+    name_file = f"{time}{fecha.replace('/','')}.parquet"
     n_dias = 2    
     fecha = datetime.strptime(fecha, "%d/%m/%Y")
     # datetime.strptime(f.strftime("%Y/%m/%d"), "%Y/%m/%d") 
@@ -79,9 +80,7 @@ if __name__ == "__main__":
             'event_date', 'event_day', 'event_hour', 'event_minute', 
             'event_month', 'event_second', 'event_year', 'latitude', 'longitude',
             'neighborhood', 'quantity_products']
-
-    df_cust = df_cust[cols]
-    
+    df_cust = df_cust[cols]    
     file_parquet = f"{file_res_path}{name_file}"
     df_cust.to_parquet(file_parquet)
     
