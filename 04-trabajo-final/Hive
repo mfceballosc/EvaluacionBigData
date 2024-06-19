@@ -1,5 +1,12 @@
 hdfs dfs -ls /user/hive
 hdfs dfs -ls /user/hive/warehouse  
 hive
-#creamos un esquema
+#creamos un esquema, 
+#van a ser archivos que van a estar dentro de un directorio.
 create database !!!;
+
+#para crear externa
+#
+create database trabajo_externo LOCATION '/unal/demo.db':
+
+
