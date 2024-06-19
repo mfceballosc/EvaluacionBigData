@@ -118,8 +118,6 @@ def generar_coordenadas(df):
 
     
 def gen_id_user_comuna(df, df_com):
-    # df = df.sort_values(by='comuna')
-    # df.reset_index(drop=True, inplace=True)
     n_por_comuna = df['comuna'].value_counts().sort_index().to_dict()
     df_com['id_user'] = 0
     df_arrays = df_com[['comuna2', 'Ponderado']]

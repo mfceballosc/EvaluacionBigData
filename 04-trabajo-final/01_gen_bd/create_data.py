@@ -56,8 +56,9 @@ if __name__ == "__main__":
     l_fecha = gen_datetime(fecha, df_cust.shape[0])    
     df_cust['fecha'] = l_fecha
     df_cust = df_cust.sort_values(by='fecha', ascending=False)
-    df_cust[['latitude', 'longitude']] = df_cust['points'].apply(lambda geom: pd.Series(obtener_coordenadas(geom)))
     
+    
+    df_cust[['latitude', 'longitude']] = df_cust['points'].apply(lambda geom: pd.Series(obtener_coordenadas(geom)))    
     df_cust['event_date'] = df_cust['fecha'].astype(str)
     df_cust[['event_date', 'event_hour']] = df_cust['event_date'].str.split(' ', expand=True)
     df_cust[['event_year', 'event_month', 'event_day']] = df_cust['event_date'].str.split('-', expand=True)
@@ -67,12 +68,9 @@ if __name__ == "__main__":
 
     df_cust = df_cust.rename(columns={'NOMBRE': 'neighborhood'})
     df_cust = df_cust.rename(columns={'IDENTIFICACION': 'commune'})
-    df_cust = df_cust.rename(columns={'empl_employee_id': 'employee_id'})
-    
+    df_cust = df_cust.rename(columns={'empl_employee_id': 'employee_id'})    
     array = list(map(int, np.random.uniform(1, 30, df_cust.shape[0])))
-
-    df_cust['quantity_products'] = array
-    
+    df_cust['quantity_products'] = array    
     generar_order_id(df_cust)
     
     
@@ -82,6 +80,8 @@ if __name__ == "__main__":
             'neighborhood', 'quantity_products']
     df_cust = df_cust[cols]    
     file_parquet = f"{file_res_path}{name_file}"
+    
+    
     df_cust.to_parquet(file_parquet)
     
     
