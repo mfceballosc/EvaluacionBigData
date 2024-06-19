@@ -1,10 +1,18 @@
 # selecciona la tabla
-spark.table("XXXXX")
+spark.table("file_parquet")
 
 #Read
-spark.read.table("XXXX")
+spark.read.table("file_parquet")
 
-spark.sql("SELECT * FROM unal.users")
+spark.sql("SELECT * FROM file_parquet")
+
+
+#cargamos la tabla 
+df = spark.table("file_parquet")
+
+
+#SELECT
+df.select("partition_date", "order_id", "commune", 'customer_id', 'employee_id', 'event_date', 'event_day', 'event_hour', 'event_minute', 'event_month', 'event_second', 'event_year', 'latitude', 'longitude', 'neighborhood', 'quantity_products').show()
 
 
 
