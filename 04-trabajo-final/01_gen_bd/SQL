@@ -44,7 +44,14 @@ df.select(
 
 #FILTRANDO DATOS
 #WHERE
-df.where(col("quantity_products") > 50).show()
+#FILTER 
+df.filter(col("quantity_products") > 12).show()
+
+#AGRUPACIONES
+df_agrupado = df.groupBy("event_day", "commune").sum("quantity_products")
+df_agrupado = df.groupBy("event_day").agg(sum("commune"), sum("quantity_products").show()
+
+
 
 
 
