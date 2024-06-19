@@ -3,10 +3,16 @@ hdfs dfs -ls /user/hive/warehouse
 hive
 #creamos un esquema, 
 #van a ser archivos que van a estar dentro de un directorio.
-create database !!!;
+
+create database trabajo;
 
 #para crear externa
-#
+#todo lo que creamos queda en el sistema distribuido de hadoop
+#estamos trabjando con hive pero fisicamente quedaría en una locación de hdfs
+#interno queda todo sobre el nivel de la carpeta de hive y externo utilizamos locaciones externas  
+
 create database trabajo_externo LOCATION '/unal/demo.db':
+
+
 
 
