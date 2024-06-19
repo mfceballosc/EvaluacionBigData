@@ -1,4 +1,5 @@
 hdfs dfs -ls /user/hive
 hdfs dfs -ls /user/hive/warehouse  
 hive
+#creamos un esquema
 create database !!!;
