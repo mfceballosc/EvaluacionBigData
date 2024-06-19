@@ -15,6 +15,7 @@ from shapely.geometry import Point
 import shapely.wkb
 import geopandas as gpd
 from shapely import wkb
+import uuid
 
 
 
@@ -22,7 +23,7 @@ from shapely import wkb
 file_path = r"data\1. Proyecciones Medellín por Comunas y Corregimientos 2018 - 2030.xlsx"
 
 file_comunas_path = r"../base.data/medellin_neighborhoods.parquet"
-file_res_path = r"../base.data/datos_por_comuna2.parquet"
+file_res_path = r"../base.data/"
 file_customers = r'../base.data/customers.parquet'
 file_employees = r'../base.data/employees.parquet'
 
@@ -221,9 +222,24 @@ def asociar_com_empl(df_com, df_empl, tipo):
     df_res = pd.merge(df_com, df_empl, on='comuna2', how='left')   
     return df_res
 
+def generar_order_id(df):
+    def gen_order_id(elm):
+        namespace = uuid.uuid4()
+        return str(uuid.uuid5(namespace, elm))
+    cols =['event_date', 'event_hour','event_minute','event_second', 
+           'customer_id','employee_id','quantity_products'] 
+    df_base = df[cols]
+    df_base = df_base.astype(str)
+    lista = list(map(gen_order_id, df_base.apply(lambda row: '-'.join(row.values), axis=1)))    
+    df['order_id'] = lista
+    return df
+
+
+
 
 if __name__ == "__main__":
     fecha = "03/04/2024"
+    name_file = f"{fecha.replace('/','')}.parquet"
     n_dias = 2    
     fecha = datetime.strptime(fecha, "%d/%m/%Y")
     # datetime.strptime(f.strftime("%Y/%m/%d"), "%Y/%m/%d") 
@@ -265,14 +281,24 @@ if __name__ == "__main__":
     df_cust = df_cust.rename(columns={'NOMBRE': 'neighborhood'})
     df_cust = df_cust.rename(columns={'IDENTIFICACION': 'commune'})
     df_cust = df_cust.rename(columns={'empl_employee_id': 'employee_id'})
-    df_cust['quantity_products'] = 1
     
-    cols =['partition_date', 'commune', 'customer_id', 'employee_id', 
+    array = list(map(int, np.random.uniform(1, 30, df_cust.shape[0])))
+    
+    
+    df_cust['quantity_products'] = array
+    
+    generar_order_id(df_cust)
+    
+    
+    cols =['partition_date', 'order_id', 'commune', 'customer_id', 'employee_id', 
             'event_date', 'event_day', 'event_hour', 'event_minute', 
             'event_month', 'event_second', 'event_year', 'latitude', 'longitude',
             'neighborhood', 'quantity_products']
 
-    df = df_cust[cols]
+    df_cust = df_cust[cols]
+    
+    file_parquet = f"{file_res_path}{name_file}"
+    df_cust.to_parquet(file_parquet)
     
     
     
