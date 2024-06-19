@@ -5,3 +5,11 @@ spark.table("XXXXX")
 spark.read.table("XXXX")
 
 spark.sql("SELECT * FROM unal.users")
+
+
+
+
+  cols =['partition_date', 'order_id', 'commune', 'customer_id', 'employee_id', 
+            'event_date', 'event_day', 'event_hour', 'event_minute', 
+            'event_month', 'event_second', 'event_year', 'latitude', 'longitude',
+            'neighborhood', 'quantity_products']
