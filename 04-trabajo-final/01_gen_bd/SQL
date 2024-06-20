@@ -51,8 +51,16 @@ df.filter(col("quantity_products") > 12).show()
 #
 df_agrupado = df.groupBy("event_day", "commune").agg(sum("quantity_products").alias("total_quantity"))
 
-#
+#MAX 
+#Venta max por event_day por comuna
 df_max = df.groupBy("event_day", "commune").agg(max("quantity").alias("max_quantity"))
+
+#Distribución de ventas por horarios en cada comuna
+df_venta_horario = df.groupBy("event_hour", "commune").agg(sum("quantity_products").alias("total_products_sold"))
+
+#Tendencias de ventas a lo largo del año por comuna
+df_agrupado = df.groupBy("event_year", "commune").agg(sum("quantity_products").alias("total_products_sold"))
+
 
 
 
