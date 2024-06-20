@@ -48,8 +48,13 @@ df.select(
 df.filter(col("quantity_products") > 12).show()
 
 #AGRUPACIONES
-df_agrupado = df.groupBy("event_day", "commune").sum("quantity_products")
-df_agrupado = df.groupBy("event_day").agg(sum("commune"), sum("quantity_products").show()
+#
+df_agrupado = df.groupBy("event_day", "commune").agg(sum("quantity_products").alias("total_quantity"))
+
+#
+df_max = df.groupBy("event_day", "commune").agg(max("quantity").alias("max_quantity"))
+
+
 
 
 
