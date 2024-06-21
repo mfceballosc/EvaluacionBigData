@@ -21,6 +21,7 @@ file_comunas_path = r"../base.data/medellin_neighborhoods.parquet"
 file_res_path = r"../base.data/"
 file_customers = r'../base.data/customers.parquet'
 file_employees = r'../base.data/employees.parquet'
+file_pobla = r'../base.data/poblacion.parquet'
 
 
 
@@ -31,7 +32,6 @@ if __name__ == "__main__":
     name_file = f"{time}{fecha.replace('/','')}.parquet"
     n_dias = 2    
     fecha = datetime.strptime(fecha, "%d/%m/%Y")
-    # datetime.strptime(f.strftime("%Y/%m/%d"), "%Y/%m/%d") 
     f_temp = [fecha + timedelta(days=d) for d in range(n_dias)]    
     fechas = [datetime.strptime(f.strftime("%Y/%m/%d"), "%Y/%m/%d") for f in f_temp]   
     df_parquet = pd.DataFrame()
@@ -41,6 +41,10 @@ if __name__ == "__main__":
     df_com = leer_archivo_comuna(file_path)
     df_cust = pd.read_parquet(file_customers)
     df_empl = pd.read_parquet(file_employees)
+    
+    df_pob = df_com.copy()
+    df_pob = df_pob.rename(columns={2024 : "poblacion"})
+    df_pob.to_parquet(file_pobla)
     
     df_cust = distribuir_personas_comunas(df_cust, df_com)    
     df_empl = distribuir_personas_comunas(df_empl, df_com)    
@@ -53,7 +57,9 @@ if __name__ == "__main__":
     df_com = asociar_com_empl(df_com, df_empl, 'empl')
 
     df_cust = gen_id_user_comuna(df=df_cust, df_com=df_com)    
-    l_fecha = gen_datetime(fecha, df_cust.shape[0])    
+    l_fecha = gen_datetime(fecha, df_cust.shape[0])
+    n_final = len(l_fecha)
+    df_cust = df_cust.sample(n_final)
     df_cust['fecha'] = l_fecha
     df_cust = df_cust.sort_values(by='fecha', ascending=False)
     

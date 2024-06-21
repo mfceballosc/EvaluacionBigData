@@ -186,10 +186,19 @@ def set_fecha(fech):
     return sumaFecha
 
 
-def gen_datetime(fecha, cantidad):
+def gen_datetime(fecha, cantidad, seg_ini = 0):
     n = 86400
-    l_seg = np.random.normal(loc=n/2, scale=n/6, size=cantidad)
-    l_seg = np.clip(l_seg, 0, n)
+    if seg_ini != 0:
+        h = datetime.now()
+        s = h.hour * 3600 + h.minute * 60 + h.second
+        s2 = s - seg_ini
+        l_seg = np.random.normal(loc=n/2, scale=n/6, size=n)
+        l_seg = np.clip(l_seg, 0, n)
+        l_seg = list(filter(lambda x: s2 <= x <= s, l_seg))
+    else:   
+        l_seg = np.random.normal(loc=n/2, scale=n/6, size=cantidad)
+        l_seg = np.clip(l_seg, 0, n)
+        
     res = map(conv_seg, l_seg)    
     f = set_fecha(fecha)
     res = map(f, res)    

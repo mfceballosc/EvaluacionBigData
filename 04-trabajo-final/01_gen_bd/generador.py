@@ -53,7 +53,7 @@ def generar_datos(fecha, segundos=3600):
     fechas = [datetime.strptime(f.strftime("%Y/%m/%d"), "%Y/%m/%d") for f in f_temp]   
     df_parquet = pd.DataFrame()
     
-    n_datos = 5000
+    n_datos = 2500
     
     df_com = leer_archivo_comuna(file_path)
     df_cust = pd.read_parquet(file_customers)
@@ -70,13 +70,15 @@ def generar_datos(fecha, segundos=3600):
     df_com = asociar_com_empl(df_com, df_empl, 'empl')
 
     df_cust = gen_id_user_comuna(df=df_cust, df_com=df_com)    
-    l_fecha = gen_datetime(fecha, df_cust.shape[0])    
+    l_fecha = gen_datetime(fecha, df_cust.shape[0], seg_ini=segundos)
+    n_final = len(l_fecha)
+    df_cust = df_cust.sample(n_final)
     df_cust['fecha'] = l_fecha    
-    mask = (df_cust['fecha'] > fecha_atras) & (df_cust['fecha'] < fecha_ahora)
-    df_cust = df_cust[mask]
-    
-    print(sum(mask))
-    if sum(mask) > 0:    
+    # mask = (df_cust['fecha'] > fecha_atras) & (df_cust['fecha'] < fecha_ahora)
+    # df_cust = df_cust[mask]
+    mask = df_cust.shape[0]
+    print(mask)
+    if mask > 0:    
         df_cust = df_cust.sort_values(by='fecha', ascending=False)
         df_cust[['latitude', 'longitude']] = df_cust['points'].apply(lambda geom: pd.Series(obtener_coordenadas(geom)))
         
@@ -105,13 +107,15 @@ def generar_datos(fecha, segundos=3600):
         df_cust = df_cust[cols]    
         file_parquet = f"{file_res_path}{name_file}"
         df_cust.to_parquet(file_parquet)
+        return df_cust
     else:
         print("No se reportan datos")
+        return False
         
 
 if __name__ == "__main__":
     f = datetime.now().strftime("%d/%m/%Y")
-    generar_datos(f, 3600)
+    dfx = generar_datos(f, 120)
     
     
     
