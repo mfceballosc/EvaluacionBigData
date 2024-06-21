@@ -26,23 +26,48 @@ df.select(df.partition_date, df.order_id, df.commune, df.customer_id, df.employe
 ##COL
 from pyspark.sql.functions import col
 
-df.select(col("first_name"), col("age")).show()
+df.select(col("partition_date"), col("order_id"), col("commune"), col("customer_id"), col("employee_id"), col("event_date"), col("event_day"), col("event_hour"), col("event_minute"), col("event_month"), col("event_second"), col("event_year"), col("latitude"), col("longitude"), col("neighborhood"), col("quantity_products")).show()
 
 #ALIAS
-
+#ya tenemos los nombres oficiales
+df.select(col("partition_date").alias("partition_").show()
 
 
 #CAST
+#si queremos convertir un tipo de dato a otro
 
 df.select(
-    col("first_name").alias("user_full_name"),
-    col("age").cast("float").alias("older")
+    col("employee_id").cast("integer"),
+    col("").cast(""),
 ).printSchema()
 
 
 #FILTRANDO DATOS
 #WHERE
-df.where(col("quantity_products") > 50).show()
+#FILTER 
+df.filter(col("quantity_products") > 12).show()
+
+#AGRUPACIONES
+#
+df_agrupado = df.groupBy("event_day", "commune").agg(sum("quantity_products").alias("total_quantity"))
+
+#MAX 
+#Venta max por event_day por comuna
+df_max = df.groupBy("event_day", "commune").agg(max("quantity").alias("max_quantity"))
+
+#Distribución de ventas por horarios en cada comuna
+df_venta_horario = df.groupBy("event_hour", "commune").agg(sum("quantity_products").alias("total_products_sold"))
+
+#Tendencias de ventas a lo largo del año por comuna
+df_agrupado = df.groupBy("event_year", "commune").agg(sum("quantity_products").alias("total_products_sold"))
+
+#promedio de productos por event_day y commune
+ = df.groupBy("event_day", "commune").agg(avg("quantity_products").alias("promedio_ventas")).orderBy("event_day", "commune")
+
+
+
+
+
 
 
 
