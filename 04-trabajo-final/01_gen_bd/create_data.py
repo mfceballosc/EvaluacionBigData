@@ -23,9 +23,6 @@ file_res_path = r"base.data/"
 file_customers = r'base.data/customers.parquet'
 file_employees = r'base.data/employees.parquet'
 
-
-
-
 if __name__ == "__main__":
     fecha = "03/04/2024"
     time = datetime.now().strftime('%S:%M:%H').replace(':','')
@@ -37,7 +34,7 @@ if __name__ == "__main__":
     fechas = [datetime.strptime(f.strftime("%Y/%m/%d"), "%Y/%m/%d") for f in f_temp]   
     df_parquet = pd.DataFrame()
     
-    n_datos = 1000
+    n_datos = 2880
     
     df_com = leer_archivo_comuna(file_path)
     df_cust = pd.read_parquet(file_customers)
@@ -70,7 +67,7 @@ if __name__ == "__main__":
     df_cust = df_cust.rename(columns={'NOMBRE': 'neighborhood'})
     df_cust = df_cust.rename(columns={'IDENTIFICACION': 'commune'})
     df_cust = df_cust.rename(columns={'empl_employee_id': 'employee_id'})    
-    array = list(map(int, np.random.uniform(1, 30, df_cust.shape[0])))
+    array = list(map(int, np.random.uniform(1, 5, df_cust.shape[0])))
     df_cust['quantity_products'] = array    
     generar_order_id(df_cust)
     
@@ -81,7 +78,7 @@ if __name__ == "__main__":
     df_cust = df_cust[cols]    
     
     file_parquet = f"{file_res_path}{name_file}" #datos crudos pesados
-    df_cust.to_parquet(os.path.join("warehouse/raw", name_file))
+    df_cust.to_parquet(os.path.join("warehouse/raw", "water.parquet"))
     
     
     
