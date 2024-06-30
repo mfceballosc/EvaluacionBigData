@@ -71,10 +71,12 @@ def asociar_comunas(df1, df2):
             if c2 in c1:
                 val = list(df2[df2.Comuna==c2].Ponderados)[0]
                 id_com = list(df2[df2.Comuna==c2].id_comuna)[0]
+                nn = list(df2[df2.Comuna==c2][2024])[0]
                 msk = df1.NOMBRE==c1                
                 df1.loc[msk, 'Ponderado'] = val
                 df1.loc[msk, 'id_comuna'] = id_com
                 df1.loc[msk, 'comuna2'] = c2
+                df1.loc[msk, 'Poblacion'] = nn
     df1.reset_index(inplace=True, drop=True)
     return df1
 

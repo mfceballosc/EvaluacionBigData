@@ -10,3 +10,9 @@ Compute el valor máximo del monto (`amount`) del crédito que ha solicitado
 una persona por cada tipo de destino (`purpose`) del crédito, usando el 
 algoritmo Map/Reduce. Para ello, complete el codigo del mapper (`mapper.py`) 
 y del reducer (`reducer.py`).
+
+```bash
+# código del mapper
+```
+
+

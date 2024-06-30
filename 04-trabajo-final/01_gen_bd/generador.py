@@ -107,10 +107,10 @@ def generar_datos(fecha, segundos=3600):
         df_cust = df_cust[cols]    
         file_parquet = f"{file_res_path}{name_file}"
         df_cust.to_parquet(file_parquet)
-        return df_cust
+        # return df_cust
     else:
         print("No se reportan datos")
-        return False
+        # return False
         
 
 if __name__ == "__main__":

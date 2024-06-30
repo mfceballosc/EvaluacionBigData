@@ -42,9 +42,9 @@ if __name__ == "__main__":
     df_cust = pd.read_parquet(file_customers)
     df_empl = pd.read_parquet(file_employees)
     
-    df_pob = df_com.copy()
-    df_pob = df_pob.rename(columns={2024 : "poblacion"})
-    df_pob.to_parquet(file_pobla)
+    # df_pob = df_com.copy()
+    # df_pob = df_pob.rename(columns={2024 : "poblacion"})
+    # df_pob.to_parquet(file_pobla)
     
     df_cust = distribuir_personas_comunas(df_cust, df_com)    
     df_empl = distribuir_personas_comunas(df_empl, df_com)    
@@ -56,39 +56,51 @@ if __name__ == "__main__":
     
     df_com = asociar_com_empl(df_com, df_empl, 'empl')
 
-    df_cust = gen_id_user_comuna(df=df_cust, df_com=df_com)    
-    l_fecha = gen_datetime(fecha, df_cust.shape[0])
-    n_final = len(l_fecha)
-    df_cust = df_cust.sample(n_final)
-    df_cust['fecha'] = l_fecha
-    df_cust = df_cust.sort_values(by='fecha', ascending=False)
-    
-    
-    df_cust[['latitude', 'longitude']] = df_cust['points'].apply(lambda geom: pd.Series(obtener_coordenadas(geom)))    
-    df_cust['event_date'] = df_cust['fecha'].astype(str)
-    df_cust[['event_date', 'event_hour']] = df_cust['event_date'].str.split(' ', expand=True)
-    df_cust[['event_year', 'event_month', 'event_day']] = df_cust['event_date'].str.split('-', expand=True)
-    df_cust[['event_hour', 'event_minute', 'event_second']] = df_cust['event_hour'].str.split(':', expand=True)
-    
-    df_cust['partition_date'] = df_cust['event_day'] +  df_cust['event_month'] + df_cust['event_year']
 
-    df_cust = df_cust.rename(columns={'NOMBRE': 'neighborhood'})
-    df_cust = df_cust.rename(columns={'IDENTIFICACION': 'commune'})
-    df_cust = df_cust.rename(columns={'empl_employee_id': 'employee_id'})    
-    array = list(map(int, np.random.uniform(1, 30, df_cust.shape[0])))
-    df_cust['quantity_products'] = array    
-    generar_order_id(df_cust)
+
+    df_pob = df_com.copy()
+    df_pob = df_pob.rename(columns={2024 : "poblacion"})
+    cols = ['NOMBRE', 'IDENTIFICACION',
+           'SUBTIPO_COMUNACORREGIMIENTO', 'LINK_DOCUMENTO', 'SHAPEAREA',
+            'Ponderado', 'id_comuna', 'comuna2',
+            'empl_name', 'empl_phone', 'Poblacion'
+           ]
+    df_pob = df_pob[cols]
+    df_pob.to_parquet(file_pobla)
+
+    # df_cust = gen_id_user_comuna(df=df_cust, df_com=df_com)    
+    # l_fecha = gen_datetime(fecha, df_cust.shape[0])
+    # n_final = len(l_fecha)
+    # df_cust = df_cust.sample(n_final)
+    # df_cust['fecha'] = l_fecha
+    # df_cust = df_cust.sort_values(by='fecha', ascending=False)
     
     
-    cols =['partition_date', 'order_id', 'commune', 'customer_id', 'employee_id', 
-            'event_date', 'event_day', 'event_hour', 'event_minute', 
-            'event_month', 'event_second', 'event_year', 'latitude', 'longitude',
-            'neighborhood', 'quantity_products']
-    df_cust = df_cust[cols]    
-    file_parquet = f"{file_res_path}{name_file}"
+    # df_cust[['latitude', 'longitude']] = df_cust['points'].apply(lambda geom: pd.Series(obtener_coordenadas(geom)))    
+    # df_cust['event_date'] = df_cust['fecha'].astype(str)
+    # df_cust[['event_date', 'event_hour']] = df_cust['event_date'].str.split(' ', expand=True)
+    # df_cust[['event_year', 'event_month', 'event_day']] = df_cust['event_date'].str.split('-', expand=True)
+    # df_cust[['event_hour', 'event_minute', 'event_second']] = df_cust['event_hour'].str.split(':', expand=True)
+    
+    # df_cust['partition_date'] = df_cust['event_day'] +  df_cust['event_month'] + df_cust['event_year']
+
+    # df_cust = df_cust.rename(columns={'NOMBRE': 'neighborhood'})
+    # df_cust = df_cust.rename(columns={'IDENTIFICACION': 'commune'})
+    # df_cust = df_cust.rename(columns={'empl_employee_id': 'employee_id'})    
+    # array = list(map(int, np.random.uniform(1, 30, df_cust.shape[0])))
+    # df_cust['quantity_products'] = array    
+    # generar_order_id(df_cust)
     
     
-    df_cust.to_parquet(file_parquet)
+    # cols =['partition_date', 'order_id', 'commune', 'customer_id', 'employee_id', 
+    #         'event_date', 'event_day', 'event_hour', 'event_minute', 
+    #         'event_month', 'event_second', 'event_year', 'latitude', 'longitude',
+    #         'neighborhood', 'quantity_products']
+    # df_cust = df_cust[cols]    
+    # file_parquet = f"{file_res_path}{name_file}"
+    
+    
+    # df_cust.to_parquet(file_parquet)
     
     
     
